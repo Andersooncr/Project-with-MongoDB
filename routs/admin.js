@@ -18,6 +18,10 @@ router.get('/records',(req,res)=>{
 });
 
 router.post('/register/new',(req,res)=>{
+
+    //Validation
+
+    //C
     const newUser = {
         name: req.body.name,
         surname: req.body.surname

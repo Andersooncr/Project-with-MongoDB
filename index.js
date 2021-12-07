@@ -21,9 +21,9 @@ const flash = require('connect-flash')
     
     //Middleware
         app.use((req,res,next)=>{
-            res.locals.success_msg = req.flash("success_msg");
-            res.locals.error.msg = req.flash("error_msg");
-            next();
+            res.locals.success_msg = req.flash('success_msg')
+            res.locals.error_msg = req.flash('error_msg')
+            next()
         })
 
     //Template Engine 

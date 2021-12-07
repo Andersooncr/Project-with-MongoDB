@@ -1,3 +1,4 @@
+const { text } = require('body-parser');
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -20,16 +21,31 @@ router.get('/records',(req,res)=>{
 router.post('/register/new',(req,res)=>{
 
     //Validation
+    var crash = []
 
-    //C
+    if(!req.body.name || typeof req.body.name == undefined || req.body.name == null){
+        crash.push({text: "Invalid name"});
+    }
+    if(!req.body.surname || typeof req.body.surname == undefined || req.body.surname == null){
+        crash.push({text: "Invalid surname"});
+    }
+    if(crash.length>0){
+        res.render('admin/register', {crash: crash});
+    }
+
+    //Creat nre user
     const newUser = {
         name: req.body.name,
         surname: req.body.surname
     }
     new User(newUser).save().then(()=>{
-        console.log("User created")
+        req.flash('success_msg', "User created")
+        res.redirect("/admin/records")
     }).catch((err)=>{
-        console.log("Ocurred a error "+err)
+        if(crash.length===0){
+            req.flash('error_msg', "An error occurred while registering the user")
+            res.redirect('/admin')
+        }
     })
 });
 

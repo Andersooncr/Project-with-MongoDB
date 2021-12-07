@@ -1,2 +1,13 @@
 <h1>List of records: </h1>
+{{#each records}}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h4>{{name}} {{surname}}</h4>
+            <small>Created at: {{date}}</small><br>
+            <a href="/admin/records/edit/{{_id}}"><button class="btn btn-success mt-4">Edit user</button></a>
+        </div>
+    </div>
+{{else}}
+
+{{/each}}
 

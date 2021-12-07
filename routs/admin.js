@@ -5,17 +5,17 @@ const mongoose = require('mongoose');
 require('../models/User')
 const User = mongoose.model("new_user")
 
-//Home Page
+//Home page
 router.get('/',(req,res)=>{
     res.render("admin/home")
 });
 
-//Register Page
+//Register page
 router.get('/register',(req,res)=>{
     res.render("admin/register")
 });
 
-//Records Page
+//Records page
 router.get('/records',(req,res)=>{
     User.find().lean().sort({date:'desc'}).then((records)=>{
         res.render("admin/records", {records: records})
@@ -82,7 +82,7 @@ router.post('/records/edit',(req,res)=>{
         res.render('admin/register', {crash: crash});
     }
 
-    //Edit User
+    //Edit user
     User.findOne({_id:req.body.id}).then((records)=>{
         records.name = req.body.name
         records.surname = req.body.surname
@@ -98,6 +98,17 @@ router.post('/records/edit',(req,res)=>{
             req.flash('error_msg', "An error occurred while updating the user")
             res.redirect('/admin/records')
         }
+    })
+})
+
+//Delete user
+router.post('records/delete:id', (req,res)=>{
+    User.deleteOneAndDelete({_id:req.body.id}).then(()=>{
+        req.flash('success_msg', "User deleted")
+        res.redirect("/admin/records") 
+    }).catch((err)=>{
+        req.flash('error_msg', "An error occurred while deleting the user")
+        res.redirect('/admin/records')
     })
 })
 

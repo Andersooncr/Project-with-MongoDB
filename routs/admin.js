@@ -102,8 +102,8 @@ router.post('/records/edit',(req,res)=>{
 })
 
 //Delete user
-router.post('records/delete:id', (req,res)=>{
-    User.deleteOneAndDelete({_id:req.body.id}).then(()=>{
+router.post('/records/delete', (req,res)=>{
+    User.deleteOne({_id:req.body.id}).then(()=>{
         req.flash('success_msg', "User deleted")
         res.redirect("/admin/records") 
     }).catch((err)=>{

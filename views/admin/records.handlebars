@@ -5,7 +5,7 @@
             <h4>{{name}} {{surname}}</h4>
             <small>Created at: {{date}}</small><br>
             <a href="/admin/records/edit/{{_id}}"><button class="btn btn-success mt-4">Edit user</button></a>
-            <form action="/admin/records/{{_id}}" method="POST">
+            <form action="/admin/records/delete" method="POST">
                 <input type="hidden" name="id" value="{{_id}}">
                 <button type="submit" class="btn btn-danger mt-2">Delete user</button>
             </form>

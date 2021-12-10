@@ -46,6 +46,9 @@ const flash = require('connect-flash')
         app.use(express.static(path.join(__dirname,"public")));
 
 //Routs
+    app.get('/',(req,res)=>{
+        res.render('index')
+    })
     app.use('/admin',admin);
 
 //Others

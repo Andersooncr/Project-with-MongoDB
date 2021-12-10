@@ -1,0 +1,23 @@
+<div class="card">
+    <div class="card-body">
+        <h4>New post: </h4>
+        <form action="">
+            <label for="title">Alert: </label>
+            <input type="text" name="title" class="form-control">
+            <label for="title">Description: </label>
+            <input type="text" name="description" class="form-control">
+            <label for="title">Contents: </label>
+            <textarea name="contents" class="form-control"></textarea>
+            <label for="user">Alert for: </label>
+            <select name="user" class="form-select">
+                {{#each records}}
+                    <option value="{{_id}}">{{name}}</option>
+                {{else}}
+                    <option value="0">No user register</option>  
+                {{/each}}
+
+            </select>
+            <button class="btn btn-success mt-4" type="submit">Create new post</button>
+        </form>
+    </div>
+</div>

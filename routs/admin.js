@@ -6,7 +6,7 @@ require('../models/User')
 const User = mongoose.model("new_user")
 
 //Home page
-router.get('/',(req,res)=>{
+router.get('/home',(req,res)=>{
     res.render("admin/home")
 });
 
@@ -21,11 +21,11 @@ router.get('/records',(req,res)=>{
         res.render("admin/records", {records: records})
     }).catch((err)=>{
         req.flash("error_msg", "An error occurred while finding users")
-        res.redirect('/admin')
+        res.redirect('/admin/home')
     })
 });
 
-//Var of validation
+//Variable of validation
 var crash = []
 
 //Creat users
@@ -35,8 +35,8 @@ router.post('/register/new',(req,res)=>{
     if(!req.body.name || typeof req.body.name == undefined || req.body.name == null){
         crash.push({text: "Invalid name"});
     }
-    if(!req.body.surname || typeof req.body.surname == undefined || req.body.surname == null){
-        crash.push({text: "Invalid surname"});
+    if(!req.body.description || typeof req.body.description == undefined || req.body.description == null){
+        crash.push({text: "Invalid description"});
     }
     if(crash.length>0){
         res.render('admin/register', {crash: crash});
@@ -45,7 +45,7 @@ router.post('/register/new',(req,res)=>{
     //Creat new user
     const newUser = {
         name: req.body.name,
-        surname: req.body.surname
+        description: req.body.description
     }
     new User(newUser).save().then(()=>{
         req.flash('success_msg', "User created")
@@ -53,7 +53,7 @@ router.post('/register/new',(req,res)=>{
     }).catch((err)=>{
         if(crash.length===0){
             req.flash('error_msg', "An error occurred while registering the user")
-            res.redirect('/admin')
+            res.redirect('/admin/home')
         }
     })
 });
@@ -75,8 +75,8 @@ router.post('/records/edit',(req,res)=>{
     if(!req.body.name || typeof req.body.name == undefined || req.body.name == null){
         crash.push({text: "Invalid name"});
     }
-    if(!req.body.surname || typeof req.body.surname == undefined || req.body.surname == null){
-        crash.push({text: "Invalid surname"});
+    if(!req.body.description || typeof req.body.description == undefined || req.body.description == null){
+        crash.push({text: "Invalid description"});
     }
     if(crash.length>0){
         res.render('admin/register', {crash: crash});
@@ -85,7 +85,7 @@ router.post('/records/edit',(req,res)=>{
     //Edit user
     User.findOne({_id:req.body.id}).then((records)=>{
         records.name = req.body.name
-        records.surname = req.body.surname
+        records.description = req.body.description
         records.save().then(()=>{
             req.flash('success_msg', "User edited")
             res.redirect("/admin/records")
@@ -102,13 +102,28 @@ router.post('/records/edit',(req,res)=>{
 })
 
 //Delete user
-router.post('/records/delete', (req,res)=>{
+router.post('/records/delete',(req,res)=>{
     User.deleteOne({_id:req.body.id}).then(()=>{
         req.flash('success_msg', "User deleted")
         res.redirect("/admin/records") 
     }).catch((err)=>{
         req.flash('error_msg', "An error occurred while deleting the user")
         res.redirect('/admin/records')
+    })
+})
+
+//Post page
+router.get('/posts',(req,res)=>{
+    res.render("admin/posts")
+})
+
+//Register post post
+router.get('/posts/new',(req,res)=>{
+    User.find().lean().then((records)=>{
+        res.render("admin/new_post", {records: records})
+    }).catch((err)=>{
+        req.flash("error_msg", "An error ocurred while load form")
+        res.redirect('/admin')
     })
 })
 

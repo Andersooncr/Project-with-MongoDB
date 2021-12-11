@@ -1,7 +1,11 @@
+{{#each crash}}
+    <div class="alert alert-danger">{{text}}</div>
+{{else}}
+{{/each}}
 <div class="card">
+    <h4>New post: </h4>
     <div class="card-body">
-        <h4>New post: </h4>
-        <form action="">
+            <form action="/admin/posts/new" method="POST">
             <label for="title">Alert: </label>
             <input type="text" name="title" class="form-control">
             <label for="title">Description: </label>

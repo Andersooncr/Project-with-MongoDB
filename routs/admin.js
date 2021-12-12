@@ -199,7 +199,7 @@ router.post('/posts/edit/post',(req,res)=>{
     if(!req.body.contents || typeof req.body.contents == undefined || req.body.contents == null){
         invalideditpost.push({text: "Invalid contents"});
     }
-    if(!req.body.user == "0"){
+    if(req.body.user == "0"){
         invalideditpost.push({text: "Invalid post, register a new post"});
     }
     if(invalideditpost.length>0){
@@ -209,7 +209,7 @@ router.post('/posts/edit/post',(req,res)=>{
         //Edit user
         Post.findOne({_id:req.body.id}).then((post)=>{
             post.alert = req.body.alert
-            post.surname = req.body.description
+            post.description = req.body.description
             post.contents = req.body.contents
             post.user = req.body.user
             post.save().then(()=>{

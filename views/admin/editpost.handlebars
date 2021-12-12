@@ -9,11 +9,11 @@
             <form action="/admin/posts/edit/post" method="POST">
             <input type="hidden" name="id" value="{{post._id}}">
                 <label for="alert">Alert: </label>
-                    <input type="text" name="alert" class="form-control">
+                    <input type="text" name="alert" class="form-control" value="{{post.alert}}">
                 <label for="description">Description: </label>
-                    <input type="text" name="description" class="form-control">
+                    <input type="text" name="description" class="form-control" value="{{post.description}}">
                 <label for="contents">Contents: </label>
-                    <textarea name="contents" class="form-control"></textarea>
+                    <textarea name="contents" class="form-control">{{post.contents}}</textarea>
                 <label for="user">Alert for: </label>
                     <select name="user" class="form-select">
                         {{#each user}}

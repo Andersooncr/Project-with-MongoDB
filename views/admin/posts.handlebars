@@ -1,3 +1,21 @@
 <h4>List of posts: </h4>
 <hr>
-<a href="/admin/new_post"><button class="btn btn-success">New post</button></a>
+<a href="/admin/new-post"><button class="btn btn-success">New post</button></a>
+{{#each posts}}
+    <div class="card mt-4">
+        <div class="card-body">
+            <label for="alert"><h2 class="form-group">Alert: {{alert}}</h2></label><br>
+            <label for="description">Description: {{description}}</label><br>
+            <label for="contents">Contents: {{contents}}</label><br>
+            <label for="user">User: {{user.name}}</label><br>
+            <small>Created at: {{date}}</small><br>
+            <a href="/admin/posts/edit_post/{{_id}}"><button class="btn btn-success mt-4">Edit post</button></a>
+            <form action="/admin/records/delete" method="POST">
+                <input type="hidden" name="id" value="{{_id}}">
+                <button type="submit" class="btn btn-danger mt-2">Delete post</button>
+            </form>
+        </div>
+    </div>
+{{else}}
+    <p>No post registered</p>
+{{/each}}

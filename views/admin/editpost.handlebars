@@ -1,11 +1,13 @@
-{{#each invalidpost}}
+{{#each invalideditpost}}
     <div class="alert alert-danger">{{text}}</div>
 {{else}}
+
 {{/each}}
+<h4>Edit post: </h4>
 <div class="card">
-    <h4>New post: </h4>
     <div class="card-body">
-            <form action="/admin/posts/new" method="POST">
+            <form action="/admin/posts/edit/post" method="POST">
+            <input type="hidden" name="id" value="{{post._id}}">
                 <label for="alert">Alert: </label>
                     <input type="text" name="alert" class="form-control">
                 <label for="description">Description: </label>
@@ -20,7 +22,7 @@
                             <option value="0">No user register</option>  
                         {{/each}}
                     </select>
-            <button class="btn btn-success mt-4" type="submit">Create new post</button>
+            <button class="btn btn-success mt-4" type="submit">Edit post</button>
         </form>
     </div>
 </div>

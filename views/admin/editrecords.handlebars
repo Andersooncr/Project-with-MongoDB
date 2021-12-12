@@ -1,14 +1,19 @@
-<h1>Edit User:</h1>
+{{#each invalidedit}}
+    <div class="alert alert-danger">{{text}}</div>
+{{else}}
+
+{{/each}}
 <div class="card">
+    <h4>Edit User:</h4>
     <div class="card-body">
     <form action="/admin/records/edit" method="POST">
     <input type="hidden" name="id" value="{{records._id}}">
-    <label for="name">Name:</label>
-        <input type="text" id="name" name="name" placeholder="First name" class="form-control" value="{{records.name}}"> 
-    <label for="name">Surname:</label>
-        <input type="text" id="surname" name="surname" placeholder="Second name" class="form-control" value="{{records.surname}}">
-        <br>        
-    <button type="submit" class="btn btn-success">Edit a user</button>
+        <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="First name" class="form-control" value="{{records.name}}"> 
+        <label for="name">Surname:</label>
+            <input type="text" id="surname" name="surname" placeholder="Second name" class="form-control" value="{{records.surname}}">
+            <br>        
+        <button type="submit" class="btn btn-success">Edit a user</button>
     </form>
     </div>
 </div>

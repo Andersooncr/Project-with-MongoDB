@@ -28,12 +28,12 @@ router.get('/records',(req,res)=>{
 });
 
 //Variable of validation
-var crash = []
+
 
 //Creat users
 router.post('/register/new',(req,res)=>{
-
     //Validation
+    let crash = []
     if(!req.body.name || typeof req.body.name == undefined || req.body.name == null){
         crash.push({text: "Invalid name"});
     }
@@ -59,7 +59,7 @@ router.post('/register/new',(req,res)=>{
     }
 });
 
-//Edit page
+//Edit user page
 router.get('/records/edit/:id',(req,res)=>{
     User.findById({_id:req.params.id}).lean().then((records)=>{
         res.render('admin/editrecords', {records: records})
@@ -73,20 +73,21 @@ router.get('/records/edit/:id',(req,res)=>{
 //Edit user
 router.post('/records/edit',(req,res)=>{
     //Validation
+    let invalidedit = [] 
     if(!req.body.name || typeof req.body.name == undefined || req.body.name == null){
-        crash.push({text: "Invalid name"});
+        invalidedit.push({text: "Invalid name"});
     }
     if(!req.body.surname || typeof req.body.surname == undefined || req.body.surname == null){
-        crash.push({text: "Invalid surname"});
+        invalidedit.push({text: "Invalid surname"});
     }
-    if(crash.length>0){
-        res.render('admin/records', {crash: crash});
+    if(invalidedit.length>0){
+        res.render('admin/records', {invalidedit: invalidedit});
     }else{
 
         //Edit user
         User.findOne({_id:req.body.id}).then((records)=>{
             records.name = req.body.name
-            records.description = req.body.description
+            records.surname = req.body.surname
             records.save().then(()=>{
                 req.flash('success_msg', "User edited")
                 res.redirect("/admin/records")
@@ -114,13 +115,18 @@ router.post('/records/delete',(req,res)=>{
 
 //Post page
 router.get('/posts',(req,res)=>{
-    res.render("admin/posts")
+    Post.find().lean().populate('user').sort({date:'desc'}).then((posts)=>{
+        res.render('admin/posts', {posts: posts})
+    }).catch((err)=>{
+        req.flash('error_msg', "An error ocurred while finding posts")
+        res.redirect('/admin/records')
+    })
 })
 
 //Register post
 router.get('/new-post',(req,res)=>{
-    User.find().lean().then((records)=>{
-        res.render("admin/new_post", {records: records})
+    User.find().lean().then((user)=>{
+        res.render("admin/new_post", {user: user})
     }).catch((err)=>{
         req.flash("error_msg", "An error ocurred while load form")
         res.redirect('/admin')
@@ -130,20 +136,21 @@ router.get('/new-post',(req,res)=>{
 //Create new post
 router.post('/posts/new',(req,res)=>{
     //validation 
+    let invalidpost = []
     if(!req.body.alert || typeof req.body.alert == undefined || req.body.alert == null){
-        crash.push({text: "Invalid alert"});
+        invalidpost.push({text: "Invalid alert"});
     }
     if(!req.body.description || typeof req.body.description == undefined || req.body.description == null){
-        crash.push({text: "Invalid description"});
+        invalidpost.push({text: "Invalid description"});
     }
     if(!req.body.contents || typeof req.body.contents == undefined || req.body.contents == null){
-        crash.push({text: "Invalid contents"});
+        invalidpost.push({text: "Invalid contents"});
     }
     if(req.body.user == "0"){
-        crash.push({text: "Invalid user, register a user"});
+        invalidpost.push({text: "Invalid user, register a user"});
     }
-    if(crash.length>0){
-        res.render('admin/new_post', {crash: crash});
+    if(invalidpost.length>0){
+        res.render('admin/new_post', {invalidpost: invalidpost});
     }else{
 
         //New post
@@ -163,8 +170,60 @@ router.post('/posts/new',(req,res)=>{
     }
 })
 
-module.exports = router
-
-
-
+//Edit post page
+router.get('/posts/edit_post/:id',(req,res)=>{
+    Post.findOne({_id:req.params.id}).lean().then((post)=>{
+        User.find().lean().then((user)=>{
+            res.render('admin/editpost', {user: user, post: post})
+        }).catch((err)=>{
+            req.flash('error_msg', "An error ocurred while listing the users")
+            res.redirect('/admin/posts')
+        })
+    }).catch((err)=>{
+        req.flash('error_msg', "An error ocurred when load form")
+        res.redirect('/admin/posts')
+    })
     
+})
+
+//Edit post
+router.post('/posts/edit/post',(req,res)=>{
+    //Validation
+    let invalideditpost = [] 
+    if(!req.body.alert || typeof req.body.alert == undefined || req.body.alert == null){
+        invalideditpost.push({text: "Invalid alert"});
+    }
+    if(!req.body.description || typeof req.body.description == undefined || req.body.description == null){
+        invalideditpost.push({text: "Invalid description"});
+    }
+    if(!req.body.contents || typeof req.body.contents == undefined || req.body.contents == null){
+        invalideditpost.push({text: "Invalid contents"});
+    }
+    if(!req.body.user == "0"){
+        invalideditpost.push({text: "Invalid post, register a new post"});
+    }
+    if(invalideditpost.length>0){
+        res.render('admin/posts', {invalideditpost: invalideditpost});
+    }else{
+
+        //Edit user
+        Post.findOne({_id:req.body.id}).then((post)=>{
+            post.alert = req.body.alert
+            post.surname = req.body.description
+            post.contents = req.body.contents
+            post.user = req.body.user
+            post.save().then(()=>{
+                req.flash('success_msg', "Post edited")
+                res.redirect("/admin/posts")
+            }).catch((err)=>{
+                req.flash('error_msg', "An error occurred while updating the post")
+                res.redirect('/admin/posts')
+            })
+        }).catch((err)=>{
+            req.flash('error_msg', "An error occurred while updating the post")
+            res.redirect('/admin/posts')
+        })
+    }
+})
+
+module.exports = router

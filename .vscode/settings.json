@@ -1,8 +1,12 @@
 {
     "cSpell.ignoreWords": [
-        "Jshy"
+        "Jshy",
+        "editpost",
+        "invalidedit",
+        "invalideditpost"
     ],
     "cSpell.words": [
-        "editrecords"
+        "editrecords",
+        "invalidpost"
     ]
 }

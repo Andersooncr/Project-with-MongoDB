@@ -226,4 +226,16 @@ router.post('/posts/edit/post',(req,res)=>{
     }
 })
 
+//Delete post
+router.post('/posts/delete',(req,res)=>{
+    Post.deleteOne({_id:req.body.id}).then(()=>{
+        req.flash('success_msg', "Post deleted")
+        res.redirect("/admin/posts") 
+    }).catch((err)=>{
+        req.flash('error_msg', "An error occurred while deleting the post")
+        res.redirect('/admin/posts')
+    })
+})
+
+
 module.exports = router
